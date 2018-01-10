@@ -13,15 +13,11 @@
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
 //
-using System;
-using System.Collections.Generic;
-using Android.App;
-using Android.Net.Http;
-using Android.Webkit;
-using Android.OS;
 using System.Threading.Tasks;
+using Android.App;
+using Android.OS;
+using Android.Webkit;
 using Xamarin.Utilities.Android;
-using System.Text;
 
 #if ! AZURE_MOBILE_SERVICES
 namespace Xamarin.Auth
@@ -30,17 +26,17 @@ namespace Xamarin.Auth._MobileServices
 #endif
 {
     [Activity(Label = "Web Authenticator")]
-    #if XAMARIN_AUTH_INTERNAL
+#if XAMARIN_AUTH_INTERNAL
     internal partial class WebAuthenticatorActivity : global::Android.Accounts.AccountAuthenticatorActivity
-    #else
+#else
     /// Pull Request - manually added/fixed
     ///		Marshalled NavigationService.GoBack to UI Thread #94
     ///		https://github.com/xamarin/Xamarin.Auth/pull/88
     //public class WebAuthenticatorActivity : Activity
     public partial class WebAuthenticatorActivity : global::Android.Accounts.AccountAuthenticatorActivity
-    #endif
+#endif
     {
-        WebView webView;
+        public WebView webView;
 
         internal class State : Java.Lang.Object
         {
@@ -132,8 +128,9 @@ namespace Xamarin.Auth._MobileServices
 
             };
             webView.Settings.UserAgentString = WebViewConfiguration.Android.UserAgent;
+            webView.Settings.UseWideViewPort = true;
+            webView.Settings.LoadWithOverviewMode = true;
             Client web_view_client = new Client(this);  // UserAgent set in the class
-                
             webView.Settings.JavaScriptEnabled = true;
             webView.SetWebViewClient(web_view_client);
             SetContentView(webView);
